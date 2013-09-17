@@ -4,38 +4,8 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf8" />
-	<style>
-		html, body, #map-canvas 
-		{
-			margin: 0;
-			padding: 0;
-			height: 100%;
-		}
-
-		.form-pesquisa
-		{
-			background-color: #FFFFFF;
-			border: 1px solid #CDCDCD;
-			left: 76px;
-			padding: 12px 20px;
-			position: absolute;
-			top: 19px;
-			z-index: 999;
-		}
-
-		.form-pesquisa input
-		{ 
-			width:300px; 
-			padding:2px; 
-		}
-
-		.form-pesquisa #pesquisa
-		{
-			text-decoration: underline;
-			cursor: pointer;
-		}
-
-	</style>
+	<link type="text/styleshets">
+	<link href="css/style.css" media="all" rel="stylesheet" type="text/css" />
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&region=ES"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 	
@@ -48,10 +18,11 @@
 
 		
 		var lojas = [
-				['Supermercado Santa Clara', -22.969773, -43.189423], 
-				['Supermercado Pao de Acucar',-22.966341, -43.186946],
-				['Supermercado Santo Antônio', -22.968415, -43.183308],
-				['Extra Supermercado Copa', -22.96598, -43.187536]
+				['Supermercado Pao de Acucar', -22.969773, -43.189423, 'logo-supermecado-paodeacucar.png'], 
+				['Supermercado Mundial Santa Clara',-22.966341, -43.186946, 'logo-supermecado-mundial.png'],
+				['Prezunic Supermercado Copacabana', -22.96598, -43.188798, 'logo-supermecado-prezunic.png'],
+				['Supermercado Mundial Nossa Senhora', -22.968415, -43.183308, 'logo-supermecado-mundial.png']
+				
 			];
 		
 		var mapOptions = {
@@ -60,22 +31,27 @@
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			};
 
-		var image = {
-				url: 'icon_supermecado.png',
-				size: new google.maps.Size(32, 32),
-				origin: new google.maps.Point(0,0),
-				anchor: new google.maps.Point(0, 32)
-			};
+		
+		var getImage = function(img)
+		{
+			return image = {
+					url: 'images/'+img,
+					size: new google.maps.Size(78, 54),
+					origin: new google.maps.Point(0,0),
+					anchor: new google.maps.Point(0, 54)
+				};
+
+		}
 			
 		var shadow = {
-			url: 'icon_supermecado.png',
-			size: new google.maps.Size(32, 32),
-			origin: new google.maps.Point(0, 32),
-			anchor: new google.maps.Point(0, 32)
+			url: 'images/logo-supermecado-paodeacucar.png',
+			size: new google.maps.Size(90, 60),
+			origin: new google.maps.Point(0, 60),
+			anchor: new google.maps.Point(0, 60)
 		};
 		
 		var shape = {
-			coord: [3, 3, 28, 28],
+			coord: [2, 2, 110, 76],
 			type: 'rect'
 		};
 
@@ -97,7 +73,7 @@
 					map: map,
 					title: loja[0],
 					shadow: shadow,
-					icon: image,
+					icon: getImage(loja[3]),
 					shape: shape
 				});
 				
@@ -117,7 +93,7 @@
   </head>
   <body>
 
-	<div class="form-pesquisa">
+	<div class="box-pesquisa">
 		<form>
 			<input type="text" id="q" name="q" />
 			<a id="pesquisa" style="text-decoration:underline;">Pesquisa</a>

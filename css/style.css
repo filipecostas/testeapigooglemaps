@@ -1,0 +1,35 @@
+html, body, #map-canvas 
+{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Arial;
+}
+
+.box-pesquisa
+{
+	background-color: #FFFFFF;
+	border: 1px solid #CDCDCD;
+	left: 76px;
+	padding: 12px 20px;
+	position: absolute;
+	top: 19px;
+	z-index: 999;
+	min-width: 220px;
+}
+
+.box-pesquisa input
+{  
+	padding:4px;
+	min-width: 160px;
+	border: 1px solid #ececec;
+}
+
+.box-pesquisa #pesquisa
+{
+	text-decoration: underline;
+	cursor: pointer;
+	color:blue;
+	font-size: 12px;
+
+}
