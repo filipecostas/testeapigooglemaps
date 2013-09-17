@@ -11,12 +11,11 @@
 	
 	<script>
 	
-		var query = "Copacabana, Rio de Janeiro";
+		var pesquisa = "Copacabana, Rio de Janeiro";
 		var geocoder;
 		var map;
 		var infowindow;
 
-		
 		var lojas = [
 				['Supermercado Pao de Acucar', -22.969773, -43.189423, 'logo-supermecado-paodeacucar.png'], 
 				['Supermercado Mundial Santa Clara',-22.966341, -43.186946, 'logo-supermecado-mundial.png'],
@@ -26,22 +25,11 @@
 			];
 		
 		var mapOptions = {
-				zoom: 16,
+				zoom: 14,
 				center: new google.maps.LatLng(lojas[0][1], lojas[0][2]),
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			};
 
-		
-		var getImage = function(img)
-		{
-			return image = {
-					url: 'images/'+img,
-					size: new google.maps.Size(78, 54),
-					origin: new google.maps.Point(0,0),
-					anchor: new google.maps.Point(0, 54)
-				};
-
-		}
 			
 		var shadow = {
 			url: 'images/logo-supermecado-paodeacucar.png',
@@ -55,15 +43,48 @@
 			type: 'rect'
 		};
 
-		var contentString = function(nome){ 
+
+		var getImage = function(img)
+		{
+			return image = {
+					url: 'images/'+img,
+					size: new google.maps.Size(78, 54),
+					origin: new google.maps.Point(0,0),
+					anchor: new google.maps.Point(0, 54)
+				};
+
+		}
+
+		var contentString = function(nome)
+		{ 
 			return '<div>nome: '+nome+'</div>';
 		}
 
 
-		function initialize()
+		function initialize(query)
 		{
+
 			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
+			//para buscar endereco
+			geocoder = new google.maps.Geocoder();
+			var address = query;
+			geocoder.geocode( { 'address': address}, function(results, status){
+				if (status == google.maps.GeocoderStatus.OK)
+				{
+					map.setCenter(results[0].geometry.location);
+					var marker = new google.maps.Marker({
+						map: map,
+						position: results[0].geometry.location
+					});
+				} 
+				else 
+				{
+					alert('Geocode was not successful for the following reason: ' + status);
+				}
+			});
+
+			//itera as marcacoes no mapa
 			for(var i = 0; i < lojas.length; i++)
 			{
 				var loja = lojas[i];
@@ -87,7 +108,24 @@
 			}
 		}
 		
-		google.maps.event.addDomListener(window, 'load', initialize);
+		//google.maps.event.addDomListener(window, 'load', initialize);
+
+
+		/***** inicia jquery *******/
+		jQuery(document).ready(function(){
+
+			initialize(pesquisa);
+			
+			jQuery('#pesquisa').click(function() {
+				//alert("query: "+jQuery("#q").val()); 
+				var palavra = jQuery("#q").val();
+				if(palavra != "")
+					initialize(palavra);
+			});
+
+			
+		});
+
 
     </script>
   </head>
