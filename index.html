@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf8" />
+	<style>
+		html, body, #map-canvas 
+		{
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+
+		.form-pesquisa
+		{
+			background-color: #FFFFFF;
+			border: 1px solid #CDCDCD;
+			left: 76px;
+			padding: 12px 20px;
+			position: absolute;
+			top: 19px;
+			z-index: 999;
+		}
+
+		.form-pesquisa input
+		{ 
+			width:300px; 
+			padding:2px; 
+		}
+
+		.form-pesquisa #pesquisa
+		{
+			text-decoration: underline;
+			cursor: pointer;
+		}
+
+	</style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&region=ES"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	
+	<script>
+	
+		var query = "Copacabana, Rio de Janeiro";
+		var geocoder;
+		var map;
+		var infowindow;
+
+		
+		var lojas = [
+				['Supermercado Santa Clara', -22.969773, -43.189423], 
+				['Supermercado Pao de Acucar',-22.966341, -43.186946],
+				['Supermercado Santo Antônio', -22.968415, -43.183308],
+				['Extra Supermercado Copa', -22.96598, -43.187536]
+			];
+		
+		var mapOptions = {
+				zoom: 16,
+				center: new google.maps.LatLng(lojas[0][1], lojas[0][2]),
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+
+		var image = {
+				url: 'icon_supermecado.png',
+				size: new google.maps.Size(32, 32),
+				origin: new google.maps.Point(0,0),
+				anchor: new google.maps.Point(0, 32)
+			};
+			
+		var shadow = {
+			url: 'icon_supermecado.png',
+			size: new google.maps.Size(32, 32),
+			origin: new google.maps.Point(0, 32),
+			anchor: new google.maps.Point(0, 32)
+		};
+		
+		var shape = {
+			coord: [3, 3, 28, 28],
+			type: 'rect'
+		};
+
+		var contentString = function(nome){ 
+			return '<div>nome: '+nome+'</div>';
+		}
+
+
+		function initialize()
+		{
+			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+			for(var i = 0; i < lojas.length; i++)
+			{
+				var loja = lojas[i];
+				var marker = new Array();
+				marker = new google.maps.Marker({
+					position: new google.maps.LatLng(loja[1], loja[2]),
+					map: map,
+					title: loja[0],
+					shadow: shadow,
+					icon: image,
+					shape: shape
+				});
+				
+				infowindow = new google.maps.InfoWindow();
+
+				google.maps.event.addListener(marker, 'click', function() {
+					infowindow.open(map, this);
+					infowindow.setContent(this.title);
+					//map.setCenter(new google.maps.LatLng(-22.968415, -43.183308));
+				});
+			}
+		}
+		
+		google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+
+	<div class="form-pesquisa">
+		<form>
+			<input type="text" id="q" name="q" />
+			<a id="pesquisa" style="text-decoration:underline;">Pesquisa</a>
+		</form>
+	</div>
+    <div id="map-canvas"></div>
+  </body>
+</html>

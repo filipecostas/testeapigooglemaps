@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+	<style>
+		html, body, #map-canvas 
+		{
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+
+		.form-pesquisa
+		{
+			background-color: #FFFFFF;
+			border: 1px solid #CDCDCD;
+			left: 76px;
+			padding: 12px 20px;
+			position: absolute;
+			top: 19px;
+			z-index: 999;
+		}
+
+		.form-pesquisa input
+		{ 
+			width:300px; 
+			padding:2px; 
+		}
+
+		.form-pesquisa #pesquisa
+		{
+			text-decoration: underline;
+			cursor: pointer;
+		}
+
+	</style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&region=ES"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	
+	<script>
+	
+	var query = "Copacabana, Rio de Janeiro";
+	var geocoder;
+	var map;
+	var infowindow;
+	
+	var locais = [
+			['Supermercado Santa Clara', -22.969773, -43.189423], 
+			['Supermercado Pão de Açucar', -22.968415, -43.183308]
+		];
+	
+	
+	//initialize
+	function initialize(query) 
+	{
+		infowindow = new google.maps.InfoWindow();
+		geocoder = new google.maps.Geocoder();
+		var mapOptions = {
+			zoom: 13,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		codeAddress(query);
+		setMarkers(map, locais);
+
+	}
+
+	// busca de enderecos
+	function codeAddress(query) 
+	{
+		var address = query;
+		geocoder.geocode( { 'address': address}, function(results, status){
+			if (status == google.maps.GeocoderStatus.OK)
+			{
+				map.setCenter(results[0].geometry.location);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: results[0].geometry.location
+				});
+			} 
+			else 
+			{
+				alert('Geocode was not successful for the following reason: ' + status);
+			}
+		});
+	}
+	
+			
+	//setar as marcacoes no mapa
+	function setMarkers(map, locations) 
+	{
+		var image = {
+			url: 'icon_supermecado.png',
+			size: new google.maps.Size(40, 40),
+			origin: new google.maps.Point(0,0),
+			anchor: new google.maps.Point(0, 40)
+		};
+		
+		var shadow = {
+			url: 'icon_supermecado.png',
+			size: new google.maps.Size(42, 42),
+			origin: new google.maps.Point(0, 42),
+			anchor: new google.maps.Point(0, 42)
+		};
+		
+		var shape = {
+			coord: [8, 8, 33, 33],
+			type: 'rect'
+		};
+		
+		for (var i = 0; i < locations.length; i++)
+		{
+			var locais = locations[i];
+			var myLatLng = new google.maps.LatLng(locais[1], locais[2]);
+			var marker = new google.maps.Marker({
+				position: myLatLng,
+				map: map,
+				shadow: shadow,
+				icon: image,
+				shape: shape,
+				title: locais[0],
+				zIndex: locais[3],
+				clickable: true	,
+		        draggable: false,
+		        flat: false
+			});
+
+			var listener = google.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent("teste "+locais[2]);
+	            infowindow.open(map, marker);
+			});
+				
+		}
+
+		
+	}
+
+	
+	//renderiza
+	//google.maps.event.addDomListener(window, 'load', initialize);
+
+	
+	//inicia jquery
+	jQuery(document).ready(function(){
+		initialize(query);
+		jQuery("#pesquisa").click(function(){ 
+			//alert("query: "+jQuery("#q").val()); 
+			var palavra = jQuery("#q").val();
+			if(palavra != "")
+				initialize(palavra);
+		});
+	});
+
+    </script>
+  </head>
+  <body>
+	<div class="form-pesquisa">
+		<form>
+			<input type="text" id="q" name="q" />
+			<a id="pesquisa" style="text-decoration:underline;">Pesquisa</a>
+		</form>
+	</div>
+    <div id="map-canvas"></div>
+  </body>
+</html>
