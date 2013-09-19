@@ -6,8 +6,11 @@
     <meta charset="utf8" />
 	<link type="text/styleshets">
 	<link href="css/style.css" media="all" rel="stylesheet" type="text/css" />
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&region=ES"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&sensor=true"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<!--script type="text/javascript" src="js/googlemapsv3exp.js"></script-->
+	
 	
 	<script>
 	
@@ -32,7 +35,7 @@
 
 			
 		var shadow = {
-			url: 'images/logo-supermecado-paodeacucar.png',
+			url: 'img/logo-supermecado-paodeacucar.png',
 			size: new google.maps.Size(90, 60),
 			origin: new google.maps.Point(0, 60),
 			anchor: new google.maps.Point(0, 60)
@@ -47,7 +50,7 @@
 		var getImage = function(img)
 		{
 			return image = {
-					url: 'images/'+img,
+					url: 'img/'+img,
 					size: new google.maps.Size(78, 54),
 					origin: new google.maps.Point(0,0),
 					anchor: new google.maps.Point(0, 54)
@@ -123,7 +126,6 @@
 					initialize(palavra);
 			});
 
-			
 		});
 
 
@@ -138,5 +140,8 @@
 		</form>
 	</div>
     <div id="map-canvas"></div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+
   </body>
 </html>
